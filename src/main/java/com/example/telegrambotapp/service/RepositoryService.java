@@ -15,21 +15,43 @@ public class RepositoryService {
         this.chatRepository = chatRepository;
     }
 
-    public void addChat(Long chatId, int threshold) {
-        Chat chat = new Chat();
-        chat.setChatId(chatId);
+   public void addPrice(Long chatId, long price){
+        Chat chat;
+        if (chatRepository.findByChatId(chatId) == null){
+            chat = new Chat();
+            chat.setChatId(chatId);
+        }
+        else {
+            chat = chatRepository.findByChatId(chatId);
+        }
+        chat.setNotifyPrice(price);
+        chatRepository.save(chat);
+    }
+    public void setThreshHold(Long chatId, int threshold){
+        Chat chat;
+        if (chatRepository.findByChatId(chatId) == null){
+            chat = new Chat();
+            chat.setChatId(chatId);
+        }
+        else {
+            chat = chatRepository.findByChatId(chatId);
+        }
         chat.setThreshold(threshold);
-
+        chatRepository.save(chat);
+    }
+    public void setPrice(Long chatId, long price){
+        Chat chat;
+        if (chatRepository.findByChatId(chatId) == null){
+            chat = new Chat();
+            chat.setChatId(chatId);
+        }
+        else {
+            chat = chatRepository.findByChatId(chatId);
+        }
+        chat.setNotifyPrice(price);
         chatRepository.save(chat);
     }
 
-    public void removeChat(Long chatId) {
-        chatRepository.delete(chatRepository.findByChatId(chatId));
-    }
 
-    public void updateThreshold(Long chatId, int threshold) {
-        Chat chat = chatRepository.findByChatId(chatId);
-        chat.setThreshold(threshold);
-        chatRepository.save(chat);
-    }
+
 }

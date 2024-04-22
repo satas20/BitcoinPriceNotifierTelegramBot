@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
@@ -44,20 +45,24 @@ public class TelegramBot extends TelegramLongPollingBot{
             System.out.println("Received message: " + messageText+" from chatId: "+chatId);
             // Process the message and generate a response
             String[] input = messageText.split(" ");
-            if(input[0].equals("/Start")) {
-                repositoryService.addChat(chatId, Integer.parseInt(input[1]));
-            } else if (input[0].equals("/Stop")) {
-                repositoryService.removeChat(chatId);
+            if(input[0].equals("/setChangeNotification")) {
+                sendMessage(chatId, "You will be notified when the price of "+input[2]+" changes by more than " + input[1] + "$");
+
+                repositoryService.setThreshHold(chatId, Integer.parseInt(input[1]));
+            } else if (input[0].equals("/setPriceNotification")) {
+                sendMessage(chatId, "You will be notified when the price of BTC reaches " + input[1] + "$");
+                repositoryService.setPrice(chatId, Long.parseLong(input[1]));
             }
-            else{
-                sendMessage(chatId, "Invalid command");
+            else if (input[0].equals("/removePriceNotification")) {
+                repositoryService.setPrice(chatId, -1);
+                sendMessage(chatId, "Notification removed");
             }
-            String response = processMessage(messageText);
-            // Send the response back to the user
-            try {
-                execute(new SendMessage(chatId.toString(), response));
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+            else if (input[0].equals("/removeChangeNotification")) {
+                repositoryService.setThreshHold(chatId, -1);
+                sendMessage(chatId, "Notification removed");
+            }
+            else {
+                sendMessage(chatId, "Unknown command");
             }
         }
     }
