@@ -1,6 +1,8 @@
 package com.example.telegrambotapp.service;
 
 import com.example.telegrambotapp.TelegramBot;
+import com.example.telegrambotapp.entity.Chat;
+import com.example.telegrambotapp.model.ChatRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -21,9 +23,14 @@ public class NotificatorService {
     Long chatId =  5240507145L;
     long currentPrice = 0;
     int threshold = 10;
+    private TelegramBot telegramBot;
 
     @Autowired
-    TelegramBot telegramBot;
+    public void setTelegramBot(TelegramBot telegramBot) {
+        this.telegramBot = telegramBot;
+    }
+
+
 
     @PostConstruct
     public void init() {

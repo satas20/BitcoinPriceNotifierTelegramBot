@@ -1,5 +1,7 @@
 package com.example.telegrambotapp;
 
+import com.example.telegrambotapp.service.RepositoryService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -14,10 +16,12 @@ public class TelegramBot extends TelegramLongPollingBot{
 
 
     private String username="satas20bot";
-
     private String token="7151227543:AAGVgrTTUwa1z9TnU5c8SxvQfDCjNjb-8Wc";
 
-    public TelegramBot() throws TelegramApiException {
+    @Autowired
+    private  final RepositoryService repositoryService;
+    public TelegramBot( RepositoryService repositoryService) throws TelegramApiException {
+        this.repositoryService = repositoryService;
         TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
         telegramBotsApi.registerBot(this);
         System.out.println("TelegramBot instance created");
@@ -39,6 +43,15 @@ public class TelegramBot extends TelegramLongPollingBot{
             Long chatId = update.getMessage().getChatId();
             System.out.println("Received message: " + messageText+" from chatId: "+chatId);
             // Process the message and generate a response
+            String[] input = messageText.split(" ");
+            if(input[0].equals("/Start")) {
+                repositoryService.addChat(chatId, Integer.parseInt(input[1]));
+            } else if (input[0].equals("/Stop")) {
+                repositoryService.removeChat(chatId);
+            }
+            else{
+                sendMessage(chatId, "Invalid command");
+            }
             String response = processMessage(messageText);
             // Send the response back to the user
             try {
