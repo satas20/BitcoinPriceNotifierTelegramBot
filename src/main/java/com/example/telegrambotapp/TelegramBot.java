@@ -45,24 +45,25 @@ public class TelegramBot extends TelegramLongPollingBot{
             System.out.println("Received message: " + messageText+" from chatId: "+chatId);
             // Process the message and generate a response
             String[] input = messageText.split(" ");
-            if(input[0].equals("/setChangeNotification")) {
-                sendMessage(chatId, "You will be notified when the price of "+input[2]+" changes by more than " + input[1] + "$");
+            switch (input[0]) {
+                case "/setChangeNotification" -> {
+                    sendMessage(chatId, "You will be notified when the price of  BTC  changes by more than " + input[1] + "$");
 
-                repositoryService.setThreshHold(chatId, Integer.parseInt(input[1]));
-            } else if (input[0].equals("/setPriceNotification")) {
-                sendMessage(chatId, "You will be notified when the price of BTC reaches " + input[1] + "$");
-                repositoryService.setPrice(chatId, Long.parseLong(input[1]));
-            }
-            else if (input[0].equals("/removePriceNotification")) {
-                repositoryService.setPrice(chatId, -1);
-                sendMessage(chatId, "Notification removed");
-            }
-            else if (input[0].equals("/removeChangeNotification")) {
-                repositoryService.setThreshHold(chatId, -1);
-                sendMessage(chatId, "Notification removed");
-            }
-            else {
-                sendMessage(chatId, "Unknown command");
+                    repositoryService.setThreshHold(chatId, Integer.parseInt(input[1]));
+                }
+                case "/setPriceNotification" -> {
+                    sendMessage(chatId, "You will be notified when the price of BTC reaches " + input[1] + "$");
+                    repositoryService.setPrice(chatId, Long.parseLong(input[1]));
+                }
+                case "/removePriceNotification" -> {
+                    repositoryService.setPrice(chatId, -1);
+                    sendMessage(chatId, "Notification removed");
+                }
+                case "/removeChangeNotification" -> {
+                    repositoryService.setThreshHold(chatId, -1);
+                    sendMessage(chatId, "Notification removed");
+                }
+                default -> sendMessage(chatId, "Unknown command");
             }
         }
     }
@@ -76,8 +77,5 @@ public class TelegramBot extends TelegramLongPollingBot{
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-    }
-    public String processMessage(String message) {
-        return "Hello, " + message;
     }
 }
