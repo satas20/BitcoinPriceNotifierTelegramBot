@@ -30,7 +30,7 @@ public class NotificatorService {
     @Autowired
     private TelegramBot telegramBot;
     @Autowired
-    private ChatRepository chatRepository
+    private ChatRepository chatRepository;
 
     public NotificatorService(ChatRepository chatRepository) {
         this.chatRepository = chatRepository;
