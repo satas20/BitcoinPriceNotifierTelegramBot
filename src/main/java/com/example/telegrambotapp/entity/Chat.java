@@ -22,4 +22,5 @@ public class Chat {
     private Long chatId;
     private int threshold;
     private long notifyPrice;
+    private boolean notifyWhenPriceHigher;
 }
