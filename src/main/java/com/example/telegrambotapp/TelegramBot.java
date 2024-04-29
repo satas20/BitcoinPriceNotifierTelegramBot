@@ -67,7 +67,7 @@ public class TelegramBot extends TelegramLongPollingBot{
                     repositoryService.setThreshHold(chatId, -1);
                     sendMessage(chatId, "Notification removed");
                 }
-                case "/help" -> sendMessage(chatId, "Commands:\n" +
+                case "/help" -> sendMessage(chatId, "Commands:\n \n" +
                         "/setChangeNotification [threshold] - set a notification for when the price of BTC changes by more than [threshold]$ \n \n" +
                         "/setPriceNotification [price] - set a notification for when the price of BTC reaches [price]$\n \n" +
                         "/removePriceNotification - remove the price notification\n \n" +
