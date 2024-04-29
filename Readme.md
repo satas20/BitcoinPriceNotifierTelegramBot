@@ -50,17 +50,6 @@ Cd into the directory and open with your IDE:
 cd BitcoinPriceNotifierTelegramBot
 ```
 
-Run Docker Daemon:
-```bash
-Start-Service Docker
-```
-
-If your docker container is not started, start manualy it with the following command:
-```bash
-docker-compose up
-```
-
-
 Run the project without executable jar file:
 ```bash
 mvn spring-boot:run
